@@ -32,10 +32,11 @@ facebook.prototype.connect = function() {
     }, {
         logLevel: 'silent'
     }).then(function(api) {
-        this.api = bluebird.promisifyAll(api);
+        this.api = api;
 
-        this.api.listenAsync().then(function(message) {
+        this.api.listen(function(err, message) {
             this.messageRecieved(message.threadID, message.body, message.senderID);
+            this.api.markAsRead(message.threadID)
         }.bind(this));
 
         this.addMessageSender(function(message, to) {
