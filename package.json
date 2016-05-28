@@ -1,0 +1,23 @@
+{
+  "name": "woodhouse-interface-facebook-messenger",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Woodhouse/woodhouse-interface-facebook-messenger.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Woodhouse/woodhouse-interface-facebook-messenger/issues"
+  },
+  "homepage": "https://github.com/Woodhouse/woodhouse-interface-facebook-messenger#readme",
+  "dependencies": {
+    "bluebird": "^3.4.0",
+    "facebook-chat-api": "^1.1.0"
+  }
+}
