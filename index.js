@@ -1,6 +1,8 @@
-var bluebird = require('bluebird'),
-    messenger = bluebird.promisify(require('facebook-chat-api')),
-    facebook = function(){
+const bluebird = require('bluebird');
+const messenger = require('facebook-chat-api');
+
+class facebook {
+    constructor() {
         this.name = 'facebook';
         this.displayname = 'Facebook Messenger';
         this.description = 'Send messages to woodhouse via Facebook Messenger';
@@ -16,39 +18,32 @@ var bluebird = require('bluebird'),
             type: 'password',
             value: ''
         }];
-    };
-
-facebook.prototype.init = function(){
-    this.getPrefs().done(function(prefs){
-        this.prefs = prefs;
-        this.connect();
-    }.bind(this));
-}
-
-facebook.prototype.connect = function() {
-    messenger({
-        email: this.prefs.username,
-        password: this.prefs.password
-    }, {
-        logLevel: 'silent'
-    }).then(function(api) {
-        this.api = api;
-
-        this.api.listen(function(err, message) {
-            this.messageRecieved(message.threadID, message.body, message.senderID);
-            this.api.markAsRead(message.threadID)
-        }.bind(this));
-
-        this.addMessageSender(function(message, to) {
-            this.api.sendMessage(message, to);
-        }.bind(this));
-    }.bind(this));
-}
-
-facebook.prototype.exit = function(){
-    if (this.api) {
-        this.api.logout();
     }
-}
+
+    init() {
+        const prefs = [
+                this.getPref('username'),
+                this.getPref('password')
+            ];
+
+        bluebird.all(prefs).then((prefs) => {
+            messenger({
+                email: prefs[0],
+                password: prefs[1]
+            }, {
+                logLevel: 'silent'
+            }, (err, api) => {
+                api.listen((err, message) => {
+                    this.messageRecieved(message.threadID, message.body, message.senderID);
+                    api.markAsRead(message.threadID)
+                });
+
+                this.addMessageSender((to, message) =>{
+                    api.sendMessage(message, to);
+                });
+            });
+        });
+    }
+};
 
 module.exports = facebook;
