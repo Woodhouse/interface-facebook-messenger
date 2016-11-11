@@ -17,7 +17,6 @@
   },
   "homepage": "https://github.com/Woodhouse/woodhouse-interface-facebook-messenger#readme",
   "dependencies": {
-    "bluebird": "^3.4.0",
     "facebook-chat-api": "^1.2.0"
   }
 }

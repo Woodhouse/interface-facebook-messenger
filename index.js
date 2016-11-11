@@ -1,4 +1,3 @@
-const bluebird = require('bluebird');
 const messenger = require('facebook-chat-api');
 
 class facebook {
@@ -7,29 +6,25 @@ class facebook {
         this.displayname = 'Facebook Messenger';
         this.description = 'Send messages to woodhouse via Facebook Messenger';
 
-        this.defaultPrefs = [{
-            name: 'username',
-            displayname: 'Username',
-            type: 'text',
-            value: ''
-        },{
-            name: 'password',
-            displayname: 'Password',
-            type: 'password',
-            value: ''
-        }];
+        this.defaultPrefs = {
+            username: {
+                displayname: 'Username',
+                type: 'text',
+                value: ''
+            },
+            password: {
+                displayname: 'Password',
+                type: 'password',
+                value: ''
+            }
+        };
     }
 
     init() {
-        const prefs = [
-                this.getPref('username'),
-                this.getPref('password')
-            ];
-
-        bluebird.all(prefs).then((prefs) => {
+        this.getAllPrefs().then((prefs) => {
             messenger({
-                email: prefs[0],
-                password: prefs[1]
+                email: prefs.username.value,
+                password: prefs.password.value
             }, {
                 logLevel: 'silent'
             }, (err, api) => {
